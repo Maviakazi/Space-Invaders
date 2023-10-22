@@ -21,6 +21,7 @@ body {
 
 .invader {
     background: blueviolet;
+    border-radius: 50%;
 }
 
 .laser {
