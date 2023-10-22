@@ -6,8 +6,12 @@ let alienInvaders = [
     25, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
 ];
 let shooterIndex = 217;
+let direction = 1;
+let movingRight = true;
+let moveInvaderId;
 /* Cached HTML elements */
 const boardEl = document.querySelector('.board');
+const scoreDisplay = document.querySelector('.score-display');
 
 // Create square divs on the board
 for (let i = 0; i < 225; i++) {
@@ -22,7 +26,7 @@ let squaresArray = Array.from(squaresEl);
 
 // Functions
 
-// Draw shooter and alien Invaders on
+// Draw shooter and alien Invaders on board
 function draw() {
     for (let i = 0; i < alienInvaders.length; i++) {
         squaresArray[alienInvaders[i]].classList.add('invader');
@@ -31,6 +35,15 @@ function draw() {
 }
 
 draw();
+
+function remove() {
+    for (let i = 0; i < alienInvaders.length; i++) {
+        squaresArray[alienInvaders[i]].classList.remove('invader');
+    }
+    squaresArray[shooterIndex].classList.remove('shooter');
+}
+
+// console.log(alienInvaders[0]);
 
 function moveShooter(event) {
     squaresArray[shooterIndex].classList.remove('shooter');
@@ -42,10 +55,45 @@ function moveShooter(event) {
         case 'ArrowRight':
             if (shooterIndex !== 224) shooterIndex += 1;
             break;
+        case ' ':
+            break;
     }
     squaresArray[shooterIndex].classList.add('shooter');
 }
 
+function moveInvaders() {
+    remove();
+    if (alienInvaders[0] % 15 === 0 && movingRight) {
+        for (let i = 0; i < alienInvaders.length; i++) {
+            alienInvaders[i] += 14;
+
+            movingRight = false;
+            direction = 1;
+        }
+    } else if (alienInvaders[32] % 15 === 14 && !movingRight) {
+        for (let i = 0; i < alienInvaders.length; i++) {
+            alienInvaders[i] += 16;
+            direction = -1;
+            movingRight = true;
+        }
+    }
+
+    for (let i = 0; i < alienInvaders.length; i++) {
+        alienInvaders[i] += direction;
+    }
+    draw();
+
+    if (squaresArray[shooterIndex].classList.contains('invader')) {
+        squaresArray[shooterIndex].classList.add('collide');
+
+        scoreDisplay.innerHTML = 'GAME OVER';
+        clearInterval(moveInvaderId);
+        remove();
+        // squaresArray[shooterIndex].classList.remove('collide');
+    }
+}
+
+moveInvaderId = setInterval(moveInvaders, 500);
 // Event Listeners
 
 window.addEventListener('keydown', moveShooter);

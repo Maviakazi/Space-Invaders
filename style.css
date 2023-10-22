@@ -24,6 +24,10 @@ body {
     border-radius: 50%;
 }
 
-.laser {
+.missile {
     background: red;
+}
+
+.collide {
+    background: orange;
 }
