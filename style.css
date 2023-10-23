@@ -26,6 +26,7 @@ body {
 
 .missile {
     background: red;
+    border-radius: 50%;
 }
 
 .collide {

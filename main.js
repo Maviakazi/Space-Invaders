@@ -9,6 +9,8 @@ let shooterIndex = 217;
 let direction = 1;
 let movingRight = true;
 let moveInvaderId;
+let moveMissilesId;
+let missileIdx;
 /* Cached HTML elements */
 const boardEl = document.querySelector('.board');
 const scoreDisplay = document.querySelector('.score-display');
@@ -43,8 +45,7 @@ function remove() {
     squaresArray[shooterIndex].classList.remove('shooter');
 }
 
-// console.log(alienInvaders[0]);
-
+// Move the shooter
 function moveShooter(event) {
     squaresArray[shooterIndex].classList.remove('shooter');
     switch (event.key) {
@@ -55,12 +56,10 @@ function moveShooter(event) {
         case 'ArrowRight':
             if (shooterIndex !== 224) shooterIndex += 1;
             break;
-        case ' ':
-            break;
     }
     squaresArray[shooterIndex].classList.add('shooter');
 }
-
+// Move Invaders
 function moveInvaders() {
     remove();
     if (alienInvaders[0] % 15 === 0 && movingRight) {
@@ -88,12 +87,30 @@ function moveInvaders() {
 
         scoreDisplay.innerHTML = 'GAME OVER';
         clearInterval(moveInvaderId);
-        remove();
+
         // squaresArray[shooterIndex].classList.remove('collide');
     }
 }
 
-moveInvaderId = setInterval(moveInvaders, 500);
+// Adding Missiles
+function shootMissiles(event) {
+    missileIdx = shooterIndex;
+    // missileIdx.classList.remove('missile');
+    function moveMissiles() {
+        squaresArray[missileIdx].classList.remove('missile');
+        missileIdx -= 15;
+        squaresArray[missileIdx].classList.add('missile');
+    }
+    switch (event.key) {
+        case ' ':
+            moveMissilesId = setInterval(moveMissiles, 100);
+            break;
+    }
+}
+
+moveInvaderId = setInterval(moveInvaders, 100);
+
 // Event Listeners
 
 window.addEventListener('keydown', moveShooter);
+window.addEventListener('keydown', shootMissiles);
