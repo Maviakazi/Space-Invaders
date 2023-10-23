@@ -9,8 +9,7 @@ let shooterIndex = 217;
 let direction = 1;
 let movingRight = true;
 let moveInvaderId;
-let moveMissilesId;
-let missileIdx;
+
 let removeCollideId;
 let killedInvaders = [];
 /* Cached HTML elements */
@@ -33,7 +32,7 @@ let squaresArray = Array.from(squaresEl);
 // Draw shooter and alien Invaders on board
 function draw() {
     for (let i = 0; i < alienInvaders.length; i++) {
-        if (!killedInvaders.includes(alienInvaders[i])) {
+        if (!killedInvaders.includes(i)) {
             squaresArray[alienInvaders[i]].classList.add('invader');
         }
     }
@@ -86,6 +85,13 @@ function moveInvaders() {
     }
     draw();
 
+    for (let i = 211; i < 226; i++) {
+        if (squaresArray[i].classList.contains('invader')) {
+            scoreDisplay.innerHTML = 'GAME OVER';
+            squaresArray[shooterIndex].classList.add('collide');
+            clearInterval(moveInvaderId);
+        }
+    }
     // Ending the game if invaders come all the way down and touch the shooter
 
     if (squaresArray[shooterIndex].classList.contains('invader')) {
@@ -93,36 +99,32 @@ function moveInvaders() {
 
         scoreDisplay.innerHTML = 'GAME OVER';
         clearInterval(moveInvaderId);
-
-        // squaresArray[shooterIndex].classList.remove('collide');
     }
-}
-
-function removeCollide() {
-    squaresArray[missileIdx].classList.remove('collide');
 }
 
 // Adding Missiles
 function shootMissiles(event) {
+    let missileIdx;
+    let moveMissilesId;
     function moveMissiles() {
-        squaresArray[missileIdx].classList.remove('missile');
+        try {
+            squaresArray[missileIdx].classList.remove('missile');
+        } catch (err) {}
         missileIdx -= 15;
         squaresArray[missileIdx].classList.add('missile');
         if (squaresArray[missileIdx].classList.contains('invader')) {
             squaresArray[missileIdx].classList.remove('invader');
-            // squaresArray[alienInvaders[missileIdx]] = null;
-            // console.log(alienInvaders[missileIdx]);
-            // alienInvaders[missileIdx] = null;
-            killedInvaders.push(squaresArray.indexOf(squaresArray[missileIdx]));
-            console.log(killedInvaders);
-            // console.log(alienInvaders);
-            squaresArray[missileIdx].classList.add('collide');
-            squaresArray[missileIdx].classList.remove('missile');
 
-            setTimeout(removeCollide, 100);
-            // console.log('hi');
+            squaresArray[missileIdx].classList.remove('missile');
+            squaresArray[missileIdx].classList.add('collide');
+
+            setTimeout(
+                () => squaresArray[missileIdx].classList.remove('collide'),
+                100
+            );
 
             clearInterval(moveMissilesId);
+            killedInvaders.push(alienInvaders.indexOf(missileIdx));
         }
     }
     switch (event.key) {
@@ -132,7 +134,7 @@ function shootMissiles(event) {
     }
 }
 
-moveInvaderId = setInterval(moveInvaders, 500);
+moveInvaderId = setInterval(moveInvaders, 100);
 
 // Event Listeners
 
