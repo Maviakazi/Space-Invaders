@@ -9,7 +9,7 @@ let shooterIndex = 217;
 let direction = 1;
 let movingRight = true;
 let moveInvaderId;
-
+let score = 0;
 let removeCollideId;
 let killedInvaders = [];
 /* Cached HTML elements */
@@ -117,6 +117,8 @@ function shootMissiles(event) {
 
             squaresArray[missileIdx].classList.remove('missile');
             squaresArray[missileIdx].classList.add('collide');
+            score++;
+            scoreDisplay.innerHTML = `Score : ${score}`;
 
             setTimeout(
                 () => squaresArray[missileIdx].classList.remove('collide'),
@@ -125,6 +127,11 @@ function shootMissiles(event) {
 
             clearInterval(moveMissilesId);
             killedInvaders.push(alienInvaders.indexOf(missileIdx));
+            console.log(alienInvaders);
+            console.log(killedInvaders);
+            if (alienInvaders.length === killedInvaders.length) {
+                scoreDisplay.innerHTML = `Score : YAYY!! You defeated all the Invaders!`;
+            }
         }
     }
     switch (event.key) {
@@ -134,7 +141,7 @@ function shootMissiles(event) {
     }
 }
 
-moveInvaderId = setInterval(moveInvaders, 100);
+moveInvaderId = setInterval(moveInvaders, 600);
 
 // Event Listeners
 
