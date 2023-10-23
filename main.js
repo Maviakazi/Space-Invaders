@@ -11,6 +11,7 @@ let movingRight = true;
 let moveInvaderId;
 let moveMissilesId;
 let missileIdx;
+let removeCollideId;
 /* Cached HTML elements */
 const boardEl = document.querySelector('.board');
 const scoreDisplay = document.querySelector('.score-display');
@@ -82,6 +83,8 @@ function moveInvaders() {
     }
     draw();
 
+    // Ending the game if invaders come all the way down and touch the shooter
+
     if (squaresArray[shooterIndex].classList.contains('invader')) {
         squaresArray[shooterIndex].classList.add('collide');
 
@@ -92,25 +95,35 @@ function moveInvaders() {
     }
 }
 
+function removeCollide() {
+    squaresArray[missileIdx].classList.remove('collide');
+}
+
 // Adding Missiles
 function shootMissiles(event) {
     missileIdx = shooterIndex;
-    // missileIdx.classList.remove('missile');
     function moveMissiles() {
         squaresArray[missileIdx].classList.remove('missile');
         missileIdx -= 15;
         squaresArray[missileIdx].classList.add('missile');
+        if (squaresArray[missileIdx].classList.contains('invader')) {
+            squaresArray[missileIdx].classList.remove('invader');
+            squaresArray[missileIdx].classList.add('collide');
+            // setTimeout(removeCollide, 100);
+            // console.log('hi');
+
+            clearInterval(moveMissilesId);
+        }
     }
     switch (event.key) {
         case ' ':
             moveMissilesId = setInterval(moveMissiles, 100);
-            break;
     }
 }
 
-moveInvaderId = setInterval(moveInvaders, 100);
+moveInvaderId = setInterval(moveInvaders, 500);
 
 // Event Listeners
 
 window.addEventListener('keydown', moveShooter);
-window.addEventListener('keydown', shootMissiles);
+document.addEventListener('keydown', shootMissiles);
