@@ -161,7 +161,7 @@ function shootMissiles(event) {
             missileAudio.play();
     }
 }
-moveInvaderId = setInterval(moveInvaders, 100);
+moveInvaderId = setInterval(moveInvaders, 500);
 // Event Listeners
 
 window.addEventListener('keydown', moveShooter);
