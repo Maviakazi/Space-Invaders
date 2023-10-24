@@ -1,4 +1,7 @@
 /* Constants */
+const missileAudio = new Audio('missile.wav');
+const gameOverAudio = new Audio('gameover.mp3');
+const winAudio = new Audio('win.wav');
 
 /* Declare variables */
 let alienInvaders = [
@@ -12,6 +15,7 @@ let moveInvaderId;
 let score = 0;
 let removeCollideId;
 let killedInvaders = [];
+
 /* Cached HTML elements */
 const boardEl = document.querySelector('.board');
 const scoreDisplay = document.querySelector('.score-display');
@@ -89,6 +93,7 @@ function moveInvaders() {
         if (squaresArray[i].classList.contains('invader')) {
             scoreDisplay.innerHTML = 'GAME OVER';
             squaresArray[shooterIndex].classList.add('collide');
+            gameOverAudio.play();
             clearInterval(moveInvaderId);
         }
     }
@@ -98,6 +103,7 @@ function moveInvaders() {
         squaresArray[shooterIndex].classList.add('collide');
 
         scoreDisplay.innerHTML = 'GAME OVER';
+        gameOverAudio.play();
         clearInterval(moveInvaderId);
     }
 }
@@ -130,7 +136,8 @@ function shootMissiles(event) {
             console.log(alienInvaders);
             console.log(killedInvaders);
             if (alienInvaders.length === killedInvaders.length) {
-                scoreDisplay.innerHTML = `Score : YAYY!! You defeated all the Invaders!`;
+                scoreDisplay.innerHTML = `YAYY!! You defeated all the Invaders!`;
+                winAudio.play();
             }
         }
     }
@@ -138,10 +145,12 @@ function shootMissiles(event) {
         case ' ':
             missileIdx = shooterIndex;
             moveMissilesId = setInterval(moveMissiles, 100);
+            missileAudio.currentTime = 0;
+            missileAudio.play();
     }
 }
 
-moveInvaderId = setInterval(moveInvaders, 600);
+moveInvaderId = setInterval(moveInvaders, 500);
 
 // Event Listeners
 
