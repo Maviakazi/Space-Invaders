@@ -2,6 +2,22 @@ body {
     display: flex;
     justify-content: center;
 }
+.header {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+h1 {
+    font-family: 'Bungee Inline', sans-serif;
+    color: #39ff14;
+}
+.score-display {
+    font-family: 'Press Start 2P', sans-serif;
+    color: blue;
+    font-size: 0.75em;
+    text-align: center;
+}
 
 .board {
     width: 300px;

@@ -89,12 +89,17 @@ function moveInvaders() {
     }
     draw();
 
+    // Ending the game if invaders come all the way down
+
     for (let i = 211; i < 226; i++) {
         if (squaresArray[i].classList.contains('invader')) {
+            console.log(squaresArray[i]);
             scoreDisplay.innerHTML = 'GAME OVER';
             squaresArray[shooterIndex].classList.add('collide');
             gameOverAudio.play();
             clearInterval(moveInvaderId);
+            window.removeEventListener('keydown', moveShooter);
+            window.removeEventListener('keydown', shootMissiles);
         }
     }
     // Ending the game if invaders come all the way down and touch the shooter
@@ -105,6 +110,8 @@ function moveInvaders() {
         scoreDisplay.innerHTML = 'GAME OVER';
         gameOverAudio.play();
         clearInterval(moveInvaderId);
+        window.removeEventListener('keydown', moveShooter);
+        window.removeEventListener('keydown', shootMissiles);
     }
 }
 
@@ -138,6 +145,8 @@ function shootMissiles(event) {
             if (alienInvaders.length === killedInvaders.length) {
                 scoreDisplay.innerHTML = `YAYY!! You defeated all the Invaders!`;
                 winAudio.play();
+                window.removeEventListener('keydown', moveShooter);
+                window.removeEventListener('keydown', shootMissiles);
             }
         }
     }
@@ -150,9 +159,9 @@ function shootMissiles(event) {
     }
 }
 
-moveInvaderId = setInterval(moveInvaders, 500);
+moveInvaderId = setInterval(moveInvaders, 400);
 
 // Event Listeners
 
 window.addEventListener('keydown', moveShooter);
-document.addEventListener('keydown', shootMissiles);
+window.addEventListener('keydown', shootMissiles);
