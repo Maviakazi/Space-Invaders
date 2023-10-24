@@ -4,6 +4,10 @@ const gameOverAudio = new Audio('./sounds/gameover.mp3');
 const winAudio = new Audio('./sounds/win.wav');
 
 /* Declare variables */
+let resetalienInvaders = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    25, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+];
 let alienInvaders = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
     25, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
@@ -39,7 +43,7 @@ function draw() {
     for (let i = 0; i < alienInvaders.length; i++) {
         if (!killedInvaders.includes(i)) {
             squaresArray[alienInvaders[i]].classList.add('invader');
-            console.log(squaresArray[alienInvaders[i]]);
+            // console.log(squaresArray[alienInvaders[i]]);
         }
     }
 
@@ -91,9 +95,9 @@ function moveInvaders() {
 
     // Ending the game if invaders come all the way down
 
-    for (let i = 211; i < 226; i++) {
+    for (let i = 210; i < 226; i++) {
         if (squaresArray[i].classList.contains('invader')) {
-            console.log(squaresArray[i]);
+            // console.log(squaresArray[i]);
             scoreDisplay.innerHTML =
                 '<span class="gameover">GAME OVER</span> <br /> Aliens invaded your planet!';
             squaresArray[shooterIndex].classList.add('collide');
@@ -119,48 +123,48 @@ function moveInvaders() {
 
 // Adding Missiles
 function shootMissiles(event) {
-    let missileIdx;
-    let moveMissilesId;
-    function moveMissiles() {
-        try {
-            squaresArray[missileIdx].classList.remove('missile');
-        } catch (err) {}
-        missileIdx -= 15;
-        squaresArray[missileIdx].classList.add('missile');
-        if (squaresArray[missileIdx].classList.contains('invader')) {
-            squaresArray[missileIdx].classList.remove('invader');
+    if (event.key === ' ') {
+        event.preventDefault(); // Prevent the default behavior (e.g., scrolling the page)
+        let missileIdx;
+        let moveMissilesId;
 
-            squaresArray[missileIdx].classList.remove('missile');
-            squaresArray[missileIdx].classList.add('collide');
-            score++;
-            scoreDisplay.innerHTML = `Score : ${score}`;
+        function moveMissiles() {
+            try {
+                squaresArray[missileIdx].classList.remove('missile');
+            } catch (err) {}
+            missileIdx -= 15;
+            squaresArray[missileIdx].classList.add('missile');
+            if (squaresArray[missileIdx].classList.contains('invader')) {
+                squaresArray[missileIdx].classList.remove('invader');
+                squaresArray[missileIdx].classList.remove('missile');
+                squaresArray[missileIdx].classList.add('collide');
+                score++;
+                scoreDisplay.innerHTML = `Score: ${score}`;
 
-            setTimeout(
-                () => squaresArray[missileIdx].classList.remove('collide'),
-                100
-            );
+                setTimeout(
+                    () => squaresArray[missileIdx].classList.remove('collide'),
+                    100
+                );
 
-            clearInterval(moveMissilesId);
-            killedInvaders.push(alienInvaders.indexOf(missileIdx));
-            // console.log(alienInvaders);
-            // console.log(killedInvaders);
-            // Game Win logic
-            if (alienInvaders.length === killedInvaders.length) {
-                scoreDisplay.innerHTML = `<span class="gamewon">Congratulations!!</span> <br />You defeated all the Invaders!`;
-                winAudio.play();
-                window.removeEventListener('keydown', moveShooter);
-                window.removeEventListener('keydown', shootMissiles);
+                clearInterval(moveMissilesId);
+                killedInvaders.push(alienInvaders.indexOf(missileIdx));
+
+                // Game Win logic
+                if (alienInvaders.length === killedInvaders.length) {
+                    scoreDisplay.innerHTML = `<span class="gamewon">Congratulations!!</span> <br />You defeated all the Invaders!`;
+                    winAudio.play();
+                    window.removeEventListener('keydown', moveShooter);
+                    window.removeEventListener('keydown', shootMissiles);
+                }
             }
         }
-    }
-    switch (event.key) {
-        case ' ':
-            missileIdx = shooterIndex;
-            moveMissilesId = setInterval(moveMissiles, 100);
-            missileAudio.currentTime = 0;
-            missileAudio.play();
+        missileIdx = shooterIndex;
+        moveMissilesId = setInterval(moveMissiles, 100);
+        missileAudio.currentTime = 0;
+        missileAudio.play();
     }
 }
+
 // moveInvaderId = setInterval(moveInvaders, 500);
 // Event Listeners
 
@@ -168,10 +172,29 @@ window.addEventListener('keydown', moveShooter);
 window.addEventListener('keydown', shootMissiles);
 startGameEl.addEventListener('click', init);
 
-function init(e) {
-    // remove();
-    // scoreDisplay.innerHTML = 'Score :';
-    clearInterval(moveInvaderId);
+let gameRunning = false;
 
+function init(e) {
+    if (gameRunning) {
+        // If the game is running, stop it and reset
+        clearInterval(moveInvaderId);
+        window.removeEventListener('keydown', moveShooter);
+        window.removeEventListener('keydown', shootMissiles);
+        gameRunning = false;
+        killedInvaders = [];
+        alienInvaders = [...resetalienInvaders];
+        score = 0;
+        scoreDisplay.textContent = 'Score: 0';
+        squaresArray.forEach((square) => {
+            square.classList.remove('invader', 'shooter', 'missile', 'collide');
+        });
+    }
+
+    // Start a new game loop for moving invaders
     moveInvaderId = setInterval(moveInvaders, 500);
+    window.addEventListener('keydown', moveShooter);
+    window.addEventListener('keydown', shootMissiles);
+
+    gameRunning = true; // Set the game to running
+    startGameEl.textContent = 'Restart Game';
 }
