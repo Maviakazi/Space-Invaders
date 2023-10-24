@@ -74,6 +74,19 @@ function moveShooter(event) {
 // Move Invaders
 function moveInvaders() {
     remove();
+    const rowBottomReached = alienInvaders.some((invader) => invader >= 210);
+    // Ending the game if invaders come all the way down
+
+    if (rowBottomReached) {
+        scoreDisplay.innerHTML =
+            '<span class="gameover">GAME OVER</span> <br /> Aliens invaded your planet!';
+        squaresArray[shooterIndex].classList.add('collide');
+        gameOverAudio.play();
+        clearInterval(moveInvaderId);
+        window.removeEventListener('keydown', moveShooter);
+        window.removeEventListener('keydown', shootMissiles);
+        return; // End the function if any invader reached the bottom row
+    }
     if (alienInvaders[0] % 15 === 0 && movingRight) {
         for (let i = 0; i < alienInvaders.length; i++) {
             direction = 1;
@@ -93,20 +106,6 @@ function moveInvaders() {
     }
     draw();
 
-    // Ending the game if invaders come all the way down
-
-    for (let i = 210; i < 226; i++) {
-        if (squaresArray[i].classList.contains('invader')) {
-            // console.log(squaresArray[i]);
-            scoreDisplay.innerHTML =
-                '<span class="gameover">GAME OVER</span> <br /> Aliens invaded your planet!';
-            squaresArray[shooterIndex].classList.add('collide');
-            gameOverAudio.play();
-            clearInterval(moveInvaderId);
-            window.removeEventListener('keydown', moveShooter);
-            window.removeEventListener('keydown', shootMissiles);
-        }
-    }
     // Ending the game if invaders come all the way down and touch the shooter
 
     if (squaresArray[shooterIndex].classList.contains('invader')) {
@@ -133,7 +132,9 @@ function shootMissiles(event) {
                 squaresArray[missileIdx].classList.remove('missile');
             } catch (err) {}
             missileIdx -= 15;
-            squaresArray[missileIdx].classList.add('missile');
+            try {
+                squaresArray[missileIdx].classList.add('missile');
+            } catch (err) {}
             if (squaresArray[missileIdx].classList.contains('invader')) {
                 squaresArray[missileIdx].classList.remove('invader');
                 squaresArray[missileIdx].classList.remove('missile');
