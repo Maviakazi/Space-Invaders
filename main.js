@@ -1,7 +1,7 @@
 /* Constants */
-const missileAudio = new Audio('missile.wav');
-const gameOverAudio = new Audio('gameover.mp3');
-const winAudio = new Audio('win.wav');
+const missileAudio = new Audio('./sounds/missile.wav');
+const gameOverAudio = new Audio('./sounds/gameover.mp3');
+const winAudio = new Audio('./sounds/win.wav');
 
 /* Declare variables */
 let alienInvaders = [
@@ -19,6 +19,7 @@ let killedInvaders = [];
 /* Cached HTML elements */
 const boardEl = document.querySelector('.board');
 const scoreDisplay = document.querySelector('.score-display');
+const startGameEl = document.querySelector('.start');
 
 // Create square divs on the board
 for (let i = 0; i < 225; i++) {
@@ -38,12 +39,12 @@ function draw() {
     for (let i = 0; i < alienInvaders.length; i++) {
         if (!killedInvaders.includes(i)) {
             squaresArray[alienInvaders[i]].classList.add('invader');
+            console.log(squaresArray[alienInvaders[i]]);
         }
     }
+
     squaresArray[shooterIndex].classList.add('shooter');
 }
-
-draw();
 
 function remove() {
     for (let i = 0; i < alienInvaders.length; i++) {
@@ -71,10 +72,9 @@ function moveInvaders() {
     remove();
     if (alienInvaders[0] % 15 === 0 && movingRight) {
         for (let i = 0; i < alienInvaders.length; i++) {
-            alienInvaders[i] += 14;
-
-            movingRight = false;
             direction = 1;
+            alienInvaders[i] += 14;
+            movingRight = false;
         }
     } else if (alienInvaders[32] % 15 === 14 && !movingRight) {
         for (let i = 0; i < alienInvaders.length; i++) {
@@ -94,7 +94,8 @@ function moveInvaders() {
     for (let i = 211; i < 226; i++) {
         if (squaresArray[i].classList.contains('invader')) {
             console.log(squaresArray[i]);
-            scoreDisplay.innerHTML = 'GAME OVER';
+            scoreDisplay.innerHTML =
+                '<span class="gameover">GAME OVER</span> <br /> Aliens invaded your planet!';
             squaresArray[shooterIndex].classList.add('collide');
             gameOverAudio.play();
             clearInterval(moveInvaderId);
@@ -107,7 +108,8 @@ function moveInvaders() {
     if (squaresArray[shooterIndex].classList.contains('invader')) {
         squaresArray[shooterIndex].classList.add('collide');
 
-        scoreDisplay.innerHTML = 'GAME OVER';
+        scoreDisplay.innerHTML =
+            '<span class="gameover">GAME OVER</span> <br /> Aliens invaded your planet!';
         gameOverAudio.play();
         clearInterval(moveInvaderId);
         window.removeEventListener('keydown', moveShooter);
@@ -140,10 +142,11 @@ function shootMissiles(event) {
 
             clearInterval(moveMissilesId);
             killedInvaders.push(alienInvaders.indexOf(missileIdx));
-            console.log(alienInvaders);
-            console.log(killedInvaders);
+            // console.log(alienInvaders);
+            // console.log(killedInvaders);
+            // Game Win logic
             if (alienInvaders.length === killedInvaders.length) {
-                scoreDisplay.innerHTML = `YAYY!! You defeated all the Invaders!`;
+                scoreDisplay.innerHTML = `<span class="gamewon">Congratulations!!</span> <br />You defeated all the Invaders!`;
                 winAudio.play();
                 window.removeEventListener('keydown', moveShooter);
                 window.removeEventListener('keydown', shootMissiles);
@@ -158,10 +161,17 @@ function shootMissiles(event) {
             missileAudio.play();
     }
 }
-
-moveInvaderId = setInterval(moveInvaders, 400);
-
+moveInvaderId = setInterval(moveInvaders, 100);
 // Event Listeners
 
 window.addEventListener('keydown', moveShooter);
 window.addEventListener('keydown', shootMissiles);
+startGameEl.addEventListener('click', init);
+
+// function init(e) {
+//     remove();
+//     scoreDisplay.innerHTML = 'Score :';
+//     clearInterval(moveInvaderId);
+
+//     moveInvaderId = setInterval(moveInvaders, 500);
+// }
