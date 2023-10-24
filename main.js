@@ -161,17 +161,17 @@ function shootMissiles(event) {
             missileAudio.play();
     }
 }
-moveInvaderId = setInterval(moveInvaders, 500);
+// moveInvaderId = setInterval(moveInvaders, 500);
 // Event Listeners
 
 window.addEventListener('keydown', moveShooter);
 window.addEventListener('keydown', shootMissiles);
 startGameEl.addEventListener('click', init);
 
-// function init(e) {
-//     remove();
-//     scoreDisplay.innerHTML = 'Score :';
-//     clearInterval(moveInvaderId);
+function init(e) {
+    // remove();
+    // scoreDisplay.innerHTML = 'Score :';
+    clearInterval(moveInvaderId);
 
-//     moveInvaderId = setInterval(moveInvaders, 500);
-// }
+    moveInvaderId = setInterval(moveInvaders, 500);
+}
