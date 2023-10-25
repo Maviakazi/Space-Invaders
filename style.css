@@ -47,6 +47,7 @@ h3 {
     font-size: 0.75em;
     text-align: center;
     line-height: 120%;
+    margin-top: 10px;
 }
 button {
     font-family: 'Press Start 2P', sans-serif;
@@ -64,6 +65,7 @@ button {
     border-radius: 7px;
     box-shadow: 0 0.2em gray;
     cursor: pointer;
+    margin: 10px auto;
 }
 .board {
     width: 300px;
