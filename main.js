@@ -2,6 +2,7 @@
 const missileAudio = new Audio('./sounds/missile.wav');
 const gameOverAudio = new Audio('./sounds/gameover.mp3');
 const winAudio = new Audio('./sounds/win.wav');
+const gamestartAudio = new Audio('./sounds/gamestart.mp3');
 
 /* Declare variables */
 let resetalienInvaders = [
@@ -178,6 +179,7 @@ let gameRunning = false;
 function init(e) {
     if (gameRunning) {
         // If the game is running, stop it and reset
+        gamestartAudio.play();
         clearInterval(moveInvaderId);
         window.removeEventListener('keydown', moveShooter);
         window.removeEventListener('keydown', shootMissiles);
@@ -195,7 +197,7 @@ function init(e) {
     moveInvaderId = setInterval(moveInvaders, 500);
     window.addEventListener('keydown', moveShooter);
     window.addEventListener('keydown', shootMissiles);
-
+    gamestartAudio.play();
     gameRunning = true; // Set the game to running
     startGameEl.textContent = 'Restart Game';
 }
