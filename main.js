@@ -3,12 +3,12 @@ const missileAudio = new Audio('./sounds/missile.wav');
 const gameOverAudio = new Audio('./sounds/gameover.mp3');
 const winAudio = new Audio('./sounds/win.wav');
 const gamestartAudio = new Audio('./sounds/gamestart.mp3');
-
-/* Declare variables */
-let resetalienInvaders = [
+const resetalienInvaders = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
     25, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
 ];
+
+/* Declare variables */
 let alienInvaders = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
     25, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
@@ -20,6 +20,7 @@ let moveInvaderId;
 let score = 0;
 let removeCollideId;
 let killedInvaders = [];
+let winner = false;
 
 /* Cached HTML elements */
 const boardEl = document.querySelector('.board');
@@ -35,7 +36,6 @@ for (let i = 0; i < 225; i++) {
 // Capturing all the squares in a variable then turn it in to an array
 const squaresEl = document.querySelectorAll('.board div');
 let squaresArray = Array.from(squaresEl);
-// console.log(squaresArray);
 
 // Functions
 
@@ -44,7 +44,6 @@ function draw() {
     for (let i = 0; i < alienInvaders.length; i++) {
         if (!killedInvaders.includes(i)) {
             squaresArray[alienInvaders[i]].classList.add('invader');
-            // console.log(squaresArray[alienInvaders[i]]);
         }
     }
 
@@ -75,19 +74,7 @@ function moveShooter(event) {
 // Move Invaders
 function moveInvaders() {
     remove();
-    const rowBottomReached = alienInvaders.some((invader) => invader >= 210);
-    // Ending the game if invaders come all the way down
 
-    if (rowBottomReached) {
-        scoreDisplay.innerHTML =
-            '<span class="gameover">GAME OVER</span> <br /> Aliens invaded your planet!';
-        squaresArray[shooterIndex].classList.add('collide');
-        gameOverAudio.play();
-        clearInterval(moveInvaderId);
-        window.removeEventListener('keydown', moveShooter);
-        window.removeEventListener('keydown', shootMissiles);
-        return; // End the function if any invader reached the bottom row
-    }
     if (alienInvaders[0] % 15 === 0 && movingRight) {
         for (let i = 0; i < alienInvaders.length; i++) {
             direction = 1;
@@ -106,7 +93,19 @@ function moveInvaders() {
         alienInvaders[i] += direction;
     }
     draw();
+    // Ending the game if invaders come all the way down
+    const rowBottomReached = alienInvaders.some((invader) => invader >= 235);
 
+    if (rowBottomReached && !winner) {
+        scoreDisplay.innerHTML =
+            '<span class="gameover">GAME OVER</span> <br /> Aliens invaded your planet!';
+        squaresArray[shooterIndex].classList.add('collide');
+        gameOverAudio.play();
+        clearInterval(moveInvaderId);
+        document.removeEventListener('keydown', moveShooter);
+        document.removeEventListener('keydown', shootMissiles);
+        return;
+    }
     // Ending the game if invaders come all the way down and touch the shooter
 
     if (squaresArray[shooterIndex].classList.contains('invader')) {
@@ -116,15 +115,15 @@ function moveInvaders() {
             '<span class="gameover">GAME OVER</span> <br /> Aliens invaded your planet!';
         gameOverAudio.play();
         clearInterval(moveInvaderId);
-        window.removeEventListener('keydown', moveShooter);
-        window.removeEventListener('keydown', shootMissiles);
+        document.removeEventListener('keydown', moveShooter);
+        document.removeEventListener('keydown', shootMissiles);
     }
 }
 
 // Adding Missiles
 function shootMissiles(event) {
-    if (event.key === ' ') {
-        event.preventDefault(); // Prevent the default behavior (e.g., scrolling the page)
+    if (event.key === 'ArrowUp') {
+        event.preventDefault();
         let missileIdx;
         let moveMissilesId;
 
@@ -155,8 +154,9 @@ function shootMissiles(event) {
                 if (alienInvaders.length === killedInvaders.length) {
                     scoreDisplay.innerHTML = `<span class="gamewon">Congratulations!!</span> <br />You defeated all the Invaders!`;
                     winAudio.play();
-                    window.removeEventListener('keydown', moveShooter);
-                    window.removeEventListener('keydown', shootMissiles);
+                    document.removeEventListener('keydown', moveShooter);
+                    document.removeEventListener('keydown', shootMissiles);
+                    winner = true;
                 }
             }
         }
@@ -167,12 +167,16 @@ function shootMissiles(event) {
     }
 }
 
-// moveInvaderId = setInterval(moveInvaders, 500);
 // Event Listeners
 
-window.addEventListener('keydown', moveShooter);
-window.addEventListener('keydown', shootMissiles);
-startGameEl.addEventListener('click', init);
+document.addEventListener('keydown', moveShooter);
+document.addEventListener('keydown', shootMissiles);
+let clickFunctionality = false;
+startGameEl.addEventListener('click', (e) => {
+    clickFunctionality = true;
+    init();
+    clickFunctionality = false;
+});
 
 let gameRunning = false;
 
@@ -181,8 +185,8 @@ function init(e) {
         // If the game is running, stop it and reset
         gamestartAudio.play();
         clearInterval(moveInvaderId);
-        window.removeEventListener('keydown', moveShooter);
-        window.removeEventListener('keydown', shootMissiles);
+        document.removeEventListener('keydown', moveShooter);
+        document.removeEventListener('keydown', shootMissiles);
         gameRunning = false;
         killedInvaders = [];
         alienInvaders = [...resetalienInvaders];
@@ -195,9 +199,11 @@ function init(e) {
 
     // Start a new game loop for moving invaders
     moveInvaderId = setInterval(moveInvaders, 500);
-    window.addEventListener('keydown', moveShooter);
-    window.addEventListener('keydown', shootMissiles);
+
+    document.addEventListener('keydown', moveShooter);
+    document.addEventListener('keydown', shootMissiles);
     gamestartAudio.play();
-    gameRunning = true; // Set the game to running
+    gameRunning = true;
+    winner = false;
     startGameEl.textContent = 'Restart Game';
 }
