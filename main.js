@@ -26,6 +26,7 @@ let winner = false;
 const boardEl = document.querySelector('.board');
 const scoreDisplay = document.querySelector('.score-display');
 const startGameEl = document.querySelector('.start');
+const remainingInvaderEls = document.getElementsByClassName('invader');
 
 // Create square divs on the board
 for (let i = 0; i < 225; i++) {
@@ -52,7 +53,7 @@ function draw() {
 
 function remove() {
     for (let i = 0; i < alienInvaders.length; i++) {
-        squaresArray[alienInvaders[i]].classList.remove('invader');
+        squaresArray[alienInvaders[i]]?.classList.remove('invader');
     }
     squaresArray[shooterIndex].classList.remove('shooter');
 }
@@ -94,7 +95,10 @@ function moveInvaders() {
     }
     draw();
     // Ending the game if invaders come all the way down
-    const rowBottomReached = alienInvaders.some((invader) => invader >= 235);
+    const sortedRemainingInvaders = Array.from(remainingInvaderEls, (el) =>
+        squaresArray.indexOf(el)
+    ).sort((a, z) => z > a);
+    const rowBottomReached = sortedRemainingInvaders[0] >= 210;
 
     if (rowBottomReached && !winner) {
         scoreDisplay.innerHTML =
@@ -128,14 +132,13 @@ function shootMissiles(event) {
         let moveMissilesId;
 
         function moveMissiles() {
-            try {
-                squaresArray[missileIdx].classList.remove('missile');
-            } catch (err) {}
+            squaresArray[missileIdx]?.classList.remove('missile');
+
             missileIdx -= 15;
-            try {
-                squaresArray[missileIdx].classList.add('missile');
-            } catch (err) {}
-            if (squaresArray[missileIdx].classList.contains('invader')) {
+
+            squaresArray[missileIdx]?.classList.add('missile');
+
+            if (squaresArray[missileIdx]?.classList.contains('invader')) {
                 squaresArray[missileIdx].classList.remove('invader');
                 squaresArray[missileIdx].classList.remove('missile');
                 squaresArray[missileIdx].classList.add('collide');
@@ -172,11 +175,7 @@ function shootMissiles(event) {
 document.addEventListener('keydown', moveShooter);
 document.addEventListener('keydown', shootMissiles);
 let clickFunctionality = false;
-startGameEl.addEventListener('click', (e) => {
-    clickFunctionality = true;
-    init();
-    clickFunctionality = false;
-});
+startGameEl.addEventListener('click', init);
 
 let gameRunning = false;
 
