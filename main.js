@@ -180,6 +180,7 @@ startGameEl.addEventListener('click', (e) => {
 
 let gameRunning = false;
 
+// Start Game and Reset Game Button event function
 function init(e) {
     if (gameRunning) {
         // If the game is running, stop it and reset
@@ -198,7 +199,7 @@ function init(e) {
     }
 
     // Start a new game loop for moving invaders
-    moveInvaderId = setInterval(moveInvaders, 500);
+    moveInvaderId = setInterval(moveInvaders, 400);
 
     document.addEventListener('keydown', moveShooter);
     document.addEventListener('keydown', shootMissiles);

@@ -1,15 +1,63 @@
-# Space Invaders Game
+# 👾 Space Invaders Game 👾
 
-A classic game made with HTML, CSS and Javascript, that takes you down memory lane!
+A classic arcade game that takes you down memory lane! Click [here](maviakazi.github.io/Space-Invaders/) to play the game and challenge your skills.
 
-### Wire Frame
+### ⚙️ Technologies Used
+
+-   HTML
+-   CSS
+-   JavaScript
+-   DOM Manipulation
+
+### ✏ Wire Frame
 
 A simple prototype of the game that I created before writing any code.
 
-![Wireframe](./misc/wireframe%20-1.png)
+![Wireframe](./misc/wireframe.png)
 
-### Getting Started
+### 🎮 Final Game Screenshots
 
-Check out the final version of [Space Invaders Game](maviakazi.github.io/Space-Invaders/) . Don't forget to defend your planet against the ALien Invaders. Your planet's fate is in your hands captain!
+🎯 Initial Screen when page loads:
 
-Use Right and Left Arrow Keys to move your spaceship and hit spacebar to shoot missiles.
+<div>
+    <img src="./misc/screenshot-1.png" alt="Screenshot 1" width="300" />
+</div>
+
+🎯 When "Play Game" button is clicked:
+
+<div>
+    <img src="./misc/screenshot-2.png" alt="Screenshot 2" width="300" />
+</div>
+
+🎯 When player shoots the missles:
+
+<div>
+    <img src="./misc/screenshot-3.jpeg" alt="Screenshot 2" width="300" />
+</div>
+
+🎯 When game is lost
+
+<div>
+    <img src="./misc/screenshot-4.png" alt="Screenshot 2" width="300" />
+</div>
+
+🎯 When game is won
+
+<div>
+    <img src="./misc/screenshot-5.png" alt="Screenshot 2" width="300" />
+</div>
+
+### 🏁 Getting Started
+
+CHeck out the final version of [Space Invaders Game](maviakazi.github.io/Space-Invaders/).
+
+Use Right and Left Arrow Keys to move your spaceship and Arrow-Up key to shoot missiles.
+
+### 🚀 Next Steps
+
+Features that can be added in future:
+
+-   Use images of spaceship and aliens instead of square and circles
+-   Make aliens shoot back
+-   Add more levels
+-   Add game start and game over screens
