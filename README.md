@@ -30,7 +30,7 @@ A simple prototype of the game that I created before writing any code. My initia
 
 All the magic happens here on the board. It controls the movement of the aliens, player and the missiles. It contains a total of 225 squares divs (15 accross and 15 down).
 
-The aliens start from the top and the player is at the bottom row.
+Purple dots are the alien invaders and the green dot at the bottom row is the player.
 
 ![Gameboard](./misc/gameboard.png)
 
