@@ -184,6 +184,7 @@ function init(e) {
     if (gameRunning) {
         // If the game is running, stop it and reset
         gamestartAudio.play();
+        gamestartAudio.currentTime = 0;
         clearInterval(moveInvaderId);
         document.removeEventListener('keydown', moveShooter);
         document.removeEventListener('keydown', shootMissiles);
@@ -203,6 +204,7 @@ function init(e) {
     document.addEventListener('keydown', moveShooter);
     document.addEventListener('keydown', shootMissiles);
     gamestartAudio.play();
+    gamestartAudio.currentTime = 0;
     gameRunning = true;
     winner = false;
     startGameEl.textContent = 'Restart Game';

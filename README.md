@@ -1,16 +1,36 @@
 # 👾 Space Invaders Game 👾
 
-A classic arcade game that takes you down memory lane! Click [here](maviakazi.github.io/Space-Invaders/) to play the game and challenge your skills.
+### 📌 Introduction
 
-### ✏ Wire Frame
+The Space Invaders arcade game is an iconic classic that has left an indelible mark on the world of video games. It introduced a new era of gaming experiences, becoming one of the earliest shooting games that captured the hearts and minds of players worldwide.
+
+I created this game for my first project for the General Assembly Software Engineering Immersive bootcamp.
+
+Let's take a trip down memory lane and challenge your shooting skills in the classic world of arcade games!
+
+### 🏁 Getting Started
+
+Check out the final version of my [Space Invaders Game](maviakazi.github.io/Space-Invaders/).
+
+Follow the instructions below to save your planet from the cruel swarm of Alien Invaders:
+
+-   Aim to shoot all the aliens before they reach bottom of the board to win the game.
+
+-   If any alien reaches the bottom, the game gets over.
+
+-   Use Right and Left Arrow Keys to move your spaceship and Arrow-Up key to shoot missiles.
+
+### 📝 Wire Frame
 
 A simple prototype of the game that I created before writing any code. My initial goal was to achieve the functionality and add styling after.
 
 ![Wireframe](./misc/wireframe.png)
 
-#### 🔲 Game Board Visualisation
+#### 📋 Game Board Visualisation
 
-The game board contains total 225 squares divs (15 by 15). The aliens start from the top and the player is at the bottom row.
+All the magic happens here on the board. It controls the movement of the aliens, player and the missiles. It contains a total of 225 squares divs (15 accross and 15 down).
+
+The aliens start from the top and the player is at the bottom row.
 
 ![Gameboard](./misc/gameboard.png)
 
@@ -53,17 +73,11 @@ The game board contains total 225 squares divs (15 by 15). The aliens start from
 -   JavaScript
 -   DOM Manipulation
 
-### 🏁 Getting Started
-
-Check out the final version of [Space Invaders Game](maviakazi.github.io/Space-Invaders/).
-
-Use Right and Left Arrow Keys to move your spaceship and Arrow-Up key to shoot missiles.
-
-### 😔 Challenges Faced
+### 😔 Challenges Faced and Conquered 😃
 
 -   Make the missiles travel from shooter to the invader
 -   Determine the left and the right edges of the board using modulus operator
--   No able to bring the top row of invaders all the way down
+-   Not able to bring the top row of invaders all the way down
 
 ### 🚀 Next Steps
 
